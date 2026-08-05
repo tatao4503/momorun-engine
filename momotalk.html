@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" data-mode="lite" data-theme-surface="lite">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#070a1a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="모모런 라이트" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="original/companion/icon-192.png" />
+<link rel="icon" href="original/companion/icon-192.png" />
+<title>모모런 - 라이트 버전</title>
+<script src="js/mode-router.js"></script>
+<link rel="stylesheet" href="css/lite.css" />
+</head>
+<body>
+<div class="lite-app">
+  <header>
+    <div class="brand-lite">
+      <img src="original/companion/icon-192.png" alt="" data-character-avatar>
+      <div>
+        <h1 data-character-ui="liteTitle">라이트 버전</h1>
+        <small data-character-template="{label} · LITE">MOMORUN · LITE</small>
+      </div>
+    </div>
+    <a href="modes.html" class="switch-btn" aria-label="모모런 버전 선택">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+      버전
+    </a>
+  </header>
+
+  <div class="spacer"></div>
+
+  <div class="panel">
+    <div id="liteGoalProgress" class="ring-wrap" role="progressbar" aria-label="오늘 걸음 목표" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0보, 목표 10,000보 중 0%">
+      <svg class="ring" viewBox="0 0 240 240" aria-hidden="true">
+        <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="16"/>
+        <circle id="prog" cx="120" cy="120" r="106" fill="none" stroke="#7dd3fc" stroke-width="16"
+                stroke-linecap="round" stroke-dasharray="666" stroke-dashoffset="666"/>
+      </svg>
+      <div class="center-content">
+        <div class="steps" id="steps">0</div>
+        <div class="steps-label">걸음</div>
+      </div>
+    </div>
+    <div class="goal-txt" id="goaltxt">목표까지 남음</div>
+    <div class="lite-memo" id="liteMemo">기록 시작을 누르면 오늘 걸음을 조용히 정리합니다.</div>
+    
+    <div class="controls">
+      <button class="btn-main" id="toggle" type="button">시작</button>
+      <button class="btn-sub" id="sample" type="button">+500 샘플</button>
+    </div>
+    
+    <div class="sensor-state" role="status" aria-live="polite">
+      <span class="dot" id="dot" aria-hidden="true"></span>
+      <span id="sensorTxt">대기 중</span>
+    </div>
+  </div>
+
+  <section class="lite-week" aria-label="최근 7일 기록">
+    <div class="lite-week-title">
+      <span>최근 7일</span>
+      <b id="liteWeekTotal">0보</b>
+    </div>
+    <div id="liteWeekBars" class="lite-week-bars"></div>
+  </section>
+  
+  <div class="spacer"></div>
+</div>
+
+<div id="toast" class="lite-toast hidden" role="status" aria-live="polite"></div>
+
+<footer class="lite-footer">
+  <span data-character-ui="liteFooter">본 앱은 비공식 팬 게임입니다.</span> | <a href="privacy.html">개인정보처리방침</a>
+</footer>
+
+<script src="js/core.js"></script>
+<script src="original/lumi/character.js"></script>
+<script src="original/companion/character.js"></script>
+<script src="js/character-loader.js"></script>
+<script src="js/character-theme.js"></script>
+<script src="js/lite.js"></script>
+</body>
+</html>
