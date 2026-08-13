@@ -1,5 +1,5 @@
 // 모모런 엔진 공개본 서비스 워커.
-const CACHE_NAME = 'momorun-engine-v1';
+const CACHE_NAME = 'momorun-engine-v2';
 const APP_ASSETS = [
   "./",
   "./modes.html",
@@ -49,8 +49,10 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          }
           return response;
         })
         .catch(() => caches.match(event.request).then(hit => hit || caches.match('./modes.html'))),
@@ -59,8 +61,10 @@ self.addEventListener('fetch', event => {
   }
   event.respondWith(
     caches.match(event.request).then(hit => hit || fetch(event.request).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      }
       return response;
     })),
   );

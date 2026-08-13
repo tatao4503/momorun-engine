@@ -108,7 +108,7 @@
     populate();
     els.modal.hidden = false;
     els.modal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('character-settings-open');
+    document.body.classList.add('character-settings-modal-open');
     requestAnimationFrame(() => els.name.focus());
   }
 
@@ -116,7 +116,7 @@
     if (els.modal.hidden) return;
     els.modal.hidden = true;
     els.modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('character-settings-open');
+    document.body.classList.remove('character-settings-modal-open');
     if (returnFocus && returnFocus.isConnected) returnFocus.focus();
     returnFocus = null;
   }

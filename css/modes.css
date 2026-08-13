@@ -361,7 +361,7 @@ button { touch-action: manipulation; }
   transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
-body.character-settings-open { overflow: hidden; }
+body.character-settings-modal-open { overflow: hidden; }
 
 .character-settings-modal {
   position: fixed;
@@ -779,28 +779,29 @@ body.character-settings-open { overflow: hidden; }
   gap: 12px;
   margin-top: 10px;
   padding: 12px 14px;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px dashed var(--cyan, #64d6ea);
   background: color-mix(in srgb, var(--cyan, #64d6ea) 10%, transparent);
 }
 .blank-pack-hint[hidden] { display: none; }
+.blank-pack-hint > div { min-width: 0; }
 .blank-pack-hint strong {
   display: block;
   font-size: 13px;
-  color: var(--ink, #13243a);
+  color: #f1fbff;
 }
 .blank-pack-hint small {
   display: block;
   margin-top: 2px;
   font-size: 11px;
   line-height: 1.45;
-  color: var(--muted, #687b91);
+  color: rgba(226, 244, 248, 0.82);
 }
 .blank-pack-hint-action {
   flex: 0 0 auto;
   padding: 9px 14px;
   border: none;
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;

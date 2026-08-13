@@ -6,7 +6,7 @@
     id: 'companion',
     name: '동행자',
     shortName: '동행자',
-    label: 'COMPANION',
+    label: 'MOMORUN',
     avatar: 'original/companion/avatar.jpg',
     availability: ['lite', 'life'],
     origin: {
