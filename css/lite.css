@@ -7,6 +7,13 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
+/* 기기의 '글자 크기' 설정을 따라간다. 기준은 16px이고,
+   사용자가 키우면 아래 rem 값들이 함께 커진다.
+   -apple-system-body에서는 크기만 빌려오고 글꼴·줄간격은 body에서 되돌린다. */
+html { font-size: 16px; }
+@supports (font: -apple-system-body) {
+  html { font: -apple-system-body; }
+}
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -16,9 +23,13 @@ a {
   font: inherit;
   touch-action: manipulation;
 }
+  /* 포커스 링은 밝은 카드와 어두운 배경 양쪽에 걸쳐 있어 단색으로는 한쪽이 묻힌다.
+     브랜드 시안 바깥 링 + 어두운 안쪽 링을 겹쳐 어느 배경에서든 하나는 보이게 한다.
+     (WCAG 2.2 · 2.4.11 포커스 표시 3:1) */
 :where(button, a):focus-visible {
   outline: 3px solid var(--cyan-soft);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(9, 24, 33, 0.9);
 }
 body {
   background-color: var(--bg);
@@ -32,6 +43,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  line-height: normal;  /* html의 -apple-system-body 줄간격을 물려받지 않는다 */
 }
 
 /* Background image handling (identical to full version) */
@@ -89,8 +101,8 @@ header {
   border-radius: 50%;
   border: 2px solid var(--cyan-soft);
 }
-.brand-lite h1 { font-size: 16px; font-weight: 900; letter-spacing: 0; }
-.brand-lite small { font-size: 10px; color: var(--cyan-soft); font-weight: 600; display: block; }
+.brand-lite h1 { font-size: 1rem; font-weight: 900; letter-spacing: 0; }
+.brand-lite small { font-size: 0.625rem; color: var(--cyan-soft); font-weight: 600; display: block; }
 
 .switch-btn {
   min-height: 44px;
@@ -99,7 +111,7 @@ header {
   color: var(--cyan-soft);
   padding: 6px 12px;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
@@ -139,13 +151,13 @@ svg.ring {
   transform: translate(-50%, -50%);
 }
 .steps {
-  font-size: 42px;
+  font-size: 2.625rem;
   font-weight: 900;
   color: #fff;
   letter-spacing: 0;
 }
 .steps-label {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--cyan-soft);
   font-weight: 600;
   margin-top: -4px;
@@ -153,7 +165,7 @@ svg.ring {
 
 .goal-txt {
   margin-top: 16px;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--violet-soft);
   font-weight: 600;
 }
@@ -162,7 +174,7 @@ svg.ring {
   margin: 10px auto 0;
   max-width: 300px;
   color: rgba(241,245,255,0.82);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.45;
   font-weight: 650;
 }
@@ -181,7 +193,7 @@ svg.ring {
   border: none;
   border-radius: 12px;
   padding: 16px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(124, 92, 240, 0.4);
@@ -195,7 +207,7 @@ svg.ring {
   border: 1px solid rgba(255,255,255,0.15);
   box-shadow: none;
   color: #dff7ff;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .btn-main.stop {
   background: linear-gradient(135deg, #e11d48, #be123c);
@@ -211,7 +223,7 @@ html.native-app .controls {
 
 .sensor-state {
   margin-top: 16px;
-  font-size: 11px;
+  font-size: 0.6875rem;
   color: rgba(255,255,255,0.5);
   display: flex;
   align-items: center;
@@ -245,13 +257,13 @@ html.native-app .controls {
 
 .lite-week-title span {
   color: #fff;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 900;
 }
 
 .lite-week-title b {
   color: var(--cyan-soft);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .lite-week-bars {
@@ -265,7 +277,7 @@ html.native-app .controls {
   align-items: center;
   gap: 8px;
   color: rgba(255,255,255,0.62);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 800;
 }
 
@@ -285,7 +297,7 @@ html.native-app .controls {
 .lite-week-row b {
   color: #fff;
   text-align: right;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 /* Minimal Momotalk Toast */
@@ -293,7 +305,7 @@ html.native-app .controls {
   position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); left: 50%; transform: translateX(-50%) translateY(50px);
   background: rgba(14,18,44,0.9); backdrop-filter: blur(10px);
   border: 1px solid rgba(125,211,252,0.3);
-  color: #fff; font-size: 13px; font-weight: 600;
+  color: #fff; font-size: 0.8125rem; font-weight: 600;
   padding: 12px 16px; border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   opacity: 0; pointer-events: none; transition: all 0.3s ease;
@@ -311,15 +323,23 @@ html.native-app .controls {
 .lite-footer {
   margin-top: 10px;
   padding: 10px 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
-  color: rgba(255,255,255,0.25);
-  font-size: 9px;
-  line-height: 1.4;
+  /* 0.25 불투명도 9px는 사실상 안 읽힌다. 고지 문구는 읽히라고 있는 것이다. */
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.6875rem;
+  line-height: 1.5;
   text-align: center;
 }
 
 .lite-footer a {
   color: var(--cyan-soft);
   text-decoration: underline;
+  /* 글자 높이만큼만 눌리면 손가락으로 못 누른다. 애플 HIG 최소 44pt를 보장하되
+     음수 마진으로 실제 레이아웃 높이는 그대로 둔다. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  margin: -14px 0;
 }
 
 @media (max-width: 380px) {

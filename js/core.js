@@ -276,7 +276,7 @@
     }
   }
 
-  async function syncWidgetSnapshot({ steps, goal }) {
+  async function syncWidgetSnapshot({ steps, goal, memo, characterName, statusTitle } = {}) {
     const Widget = getNativePlugin('MomoWidget');
     if (!Widget || typeof Widget.update !== 'function') return false;
     try {
@@ -284,10 +284,44 @@
         steps: Math.max(0, Math.round(+steps || 0)),
         goal: Math.max(100, Math.round(+goal || fallbackGoal())),
         dateKey: localDateStamp(),
+        memo: memo || '',
+        characterName: characterName || '',
+        statusTitle: statusTitle || '',
       });
       return true;
     } catch (err) {
       console.warn('위젯 기록 갱신 실패:', err);
+      return false;
+    }
+  }
+
+  async function startLiveActivity({ steps, goal, memo, characterName, statusTitle } = {}) {
+    const Widget = getNativePlugin('MomoWidget');
+    if (!Widget || typeof Widget.startLiveActivity !== 'function') return false;
+    try {
+      const res = await Widget.startLiveActivity({
+        steps: Math.max(0, Math.round(+steps || 0)),
+        goal: Math.max(100, Math.round(+goal || fallbackGoal())),
+        dateKey: localDateStamp(),
+        memo: memo || '',
+        characterName: characterName || '',
+        statusTitle: statusTitle || '',
+      });
+      return Boolean(res && res.started);
+    } catch (err) {
+      console.warn('라이브 액티비티 시작 실패:', err);
+      return false;
+    }
+  }
+
+  async function stopLiveActivity() {
+    const Widget = getNativePlugin('MomoWidget');
+    if (!Widget || typeof Widget.stopLiveActivity !== 'function') return false;
+    try {
+      await Widget.stopLiveActivity();
+      return true;
+    } catch (err) {
+      console.warn('라이브 액티비티 종료 실패:', err);
       return false;
     }
   }
@@ -416,13 +450,35 @@
     });
   }
 
+  // 무거운 라이브러리(차트·캡처·컨페티)는 첫 화면을 막지 않도록 필요할 때만 불러온다.
+  // 서비스 워커가 이미 캐시해 두므로 오프라인에서도 동작한다.
+  const scriptPromises = new Map();
+  function loadScript(src) {
+    if (scriptPromises.has(src)) return scriptPromises.get(src);
+    const promise = new Promise((resolve, reject) => {
+      const el = document.createElement('script');
+      el.src = src;
+      el.async = true;
+      el.onload = () => resolve(true);
+      el.onerror = () => {
+        scriptPromises.delete(src);
+        reject(new Error(`스크립트를 불러오지 못했습니다: ${src}`));
+      };
+      document.head.appendChild(el);
+    });
+    scriptPromises.set(src, promise);
+    return promise;
+  }
+
   window.NoaCore = {
     STORAGE_PREFIX,
     CIRC: 2 * Math.PI * 106, // ≈ 666
     pad, dateKey, legacyDateKey, todayKey, localDateStamp, daysBetweenDateStamps,
     fallbackGoal, parseRecord, safeSet, storage,
     isNativePlatform, getNativePlugin, createStepDetector, syncHealthKit, syncWidgetSnapshot,
+    startLiveActivity, stopLiveActivity,
     feedback,
     initBackgroundTasks, setupAppLifecycle, registerServiceWorker,
+    loadScript,
   };
 })();

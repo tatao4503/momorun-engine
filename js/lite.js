@@ -60,7 +60,7 @@
       showToast('기록 저장 실패 — 사생활 모드인지 확인해 주세요.');
     } else if (ok) {
       storageWarned = false;
-      C.syncWidgetSnapshot({ steps: state.steps, goal: state.goal });
+      C.syncWidgetSnapshot(liveActivityPayload());
     }
   }
   function save() {
@@ -241,6 +241,20 @@
     els.toggle.textContent = '정지';
     els.toggle.classList.add('stop');
     showToast(CHAR.lines.lite.start);
+    // 측정하는 동안만 잠금화면 라이브 액티비티를 띄운다. (웹에서는 조용히 무시된다)
+    C.startLiveActivity(liveActivityPayload());
+  }
+
+  function liveActivityPayload() {
+    const identity = window.MomoTheme?.getIdentity?.() || {};
+    const done = state.steps >= state.goal;
+    return {
+      steps: state.steps,
+      goal: state.goal,
+      characterName: identity.shortName || identity.name || CHAR.shortName || CHAR.name || '',
+      statusTitle: done ? '목표 달성' : '기록 중',
+      memo: done ? CHAR.lines.lite.memo.done : CHAR.lines.lite.memo.progress,
+    };
   }
 
   function stop() {
@@ -249,6 +263,7 @@
     setSensor(false, '정지됨');
     els.toggle.textContent = '시작';
     els.toggle.classList.remove('stop');
+    C.stopLiveActivity();
   }
 
   els.toggle.onclick = () => {
@@ -287,6 +302,6 @@
   }
 
   load();
-  C.syncWidgetSnapshot({ steps: state.steps, goal: state.goal });
+  C.syncWidgetSnapshot(liveActivityPayload());
   C.registerServiceWorker();
 })();

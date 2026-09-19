@@ -3,12 +3,24 @@
   --muted: #687b91;
   --cyan: #64d6ea;
   --cyan-deep: #278eae;
+
+  /* 밝은 카드 위 작은 글씨는 원본 토큰으로는 WCAG AA(4.5:1)에 못 미친다.
+     원본은 테두리·아이콘 같은 장식에 그대로 쓰고, 글자에는 아래 파생 토큰을 쓴다. */
+  --muted-text: color-mix(in srgb, var(--muted) 75%, #0b1a22);
+  --cyan-deep-text: color-mix(in srgb, var(--cyan-deep) 70%, #0b1a22);
   --lavender: #9482d1;
   --paper: #f4fafc;
   --navy: #152338;
 }
 
 * { box-sizing: border-box; }
+/* 기기의 '글자 크기' 설정을 따라간다. 기준은 16px이고,
+   사용자가 키우면 아래 rem 값들이 함께 커진다.
+   -apple-system-body에서는 크기만 빌려오고 글꼴·줄간격은 body에서 되돌린다. */
+html { font-size: 16px; }
+@supports (font: -apple-system-body) {
+  html { font: -apple-system-body; }
+}
 html {
   background: var(--navy);
   -webkit-text-size-adjust: 100%;
@@ -25,6 +37,7 @@ body {
   background-position: center top;
   background-attachment: fixed;
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  line-height: normal;  /* html의 -apple-system-body 줄간격을 물려받지 않는다 */
   letter-spacing: 0;
 }
 
@@ -33,9 +46,13 @@ a {
   touch-action: manipulation;
 }
 button { touch-action: manipulation; }
+  /* 포커스 링은 밝은 카드와 어두운 배경 양쪽에 걸쳐 있어 단색으로는 한쪽이 묻힌다.
+     브랜드 시안 바깥 링 + 어두운 안쪽 링을 겹쳐 어느 배경에서든 하나는 보이게 한다.
+     (WCAG 2.2 · 2.4.11 포커스 표시 3:1) */
 :where(a):focus-visible {
   outline: 3px solid #a9eff8;
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(9, 24, 33, 0.9);
 }
 
 .mode-shell {
@@ -78,20 +95,20 @@ button { touch-action: manipulation; }
 
 .mode-kicker {
   color: #a7edf6;
-  font-size: 9px;
+  font-size: 0.625rem;
   font-weight: 850;
 }
 
 .mode-header h1 {
   margin: 3px 0 0;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1.15;
 }
 
 .mode-header p {
   margin: 18px 0 0;
   color: rgba(235, 249, 255, 0.82);
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 650;
 }
 
@@ -113,11 +130,12 @@ button { touch-action: manipulation; }
   -webkit-tap-highlight-color: transparent;
 }
 .character-settings-open svg { width: 21px; height: 21px; }
-.character-settings-open span { font-size: 9px; font-weight: 850; }
+.character-settings-open span { font-size: 0.625rem; font-weight: 850; }
 .character-settings-open:active { transform: translateY(1px); }
 .character-settings-open:focus-visible {
   outline: 3px solid #a9eff8;
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(9, 24, 33, 0.9);
 }
 .base-pack-selector {
   margin: 0 4px 18px;
@@ -135,17 +153,17 @@ button { touch-action: manipulation; }
 }
 .base-pack-heading span {
   color: #a7edf6;
-  font-size: 8px;
+  font-size: 0.625rem;
   font-weight: 900;
 }
 .base-pack-heading h2 {
   margin: 3px 0 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.2;
 }
 .base-pack-heading > small {
   color: rgba(226, 244, 248, 0.7);
-  font-size: 9px;
+  font-size: 0.625rem;
   font-weight: 700;
 }
 .base-pack-options {
@@ -183,13 +201,13 @@ button { touch-action: manipulation; }
   /* 한국어 라벨이 단어 중간에서 잘리지 않도록 어절 단위로 줄바꿈한다. */
   word-break: keep-all;
   overflow-wrap: break-word;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.25;
 }
 .base-pack-option small {
   margin-top: 3px;
-  color: var(--muted);
-  font-size: 8px;
+  color: var(--muted-text);
+  font-size: 0.625rem;
   font-weight: 700;
 }
 .base-pack-option em {
@@ -199,7 +217,7 @@ button { touch-action: manipulation; }
   border-radius: 3px;
   color: #587180;
   background: #edf5f7;
-  font-size: 7px;
+  font-size: 0.625rem;
   font-style: normal;
   font-weight: 900;
 }
@@ -212,11 +230,12 @@ button { touch-action: manipulation; }
 .base-pack-option:focus-visible {
   outline: 3px solid #a9eff8;
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(9, 24, 33, 0.9);
 }
 .base-pack-selector > p {
   margin: 9px 0 0;
   color: rgba(226, 244, 248, 0.74);
-  font-size: 9px;
+  font-size: 0.625rem;
   line-height: 1.45;
   font-weight: 700;
 }
@@ -265,7 +284,7 @@ button { touch-action: manipulation; }
   left: 12px;
   bottom: 12px;
   color: #fff;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 900;
 }
 .mode-schale .mode-art { background-image: var(--character-mode-card-schale, url("../original/companion/mobile.jpg")); }
@@ -286,26 +305,26 @@ button { touch-action: manipulation; }
   gap: 8px;
 }
 .mode-title-line span {
-  color: var(--cyan-deep);
-  font-size: 9px;
+  color: var(--cyan-deep-text);
+  font-size: 0.625rem;
   font-weight: 900;
 }
 .mode-title-line h2 {
   margin: 2px 0 0;
-  font-size: 19px;
+  font-size: 1.1875rem;
   line-height: 1.2;
 }
 .mode-title-line b {
   min-height: 20px;
-  color: #277e73;
-  font-size: 9px;
+  color: #267a6f;
+  font-size: 0.625rem;
   white-space: nowrap;
 }
 
 .mode-copy > p {
   margin: 8px 0 9px;
-  color: var(--muted);
-  font-size: 12px;
+  color: var(--muted-text);
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -320,7 +339,7 @@ button { touch-action: manipulation; }
   border-radius: 3px;
   color: #536a82;
   background: #edf5f7;
-  font-size: 9px;
+  font-size: 0.625rem;
   font-weight: 750;
 }
 
@@ -334,7 +353,7 @@ button { touch-action: manipulation; }
   border-radius: 5px;
   color: #fff;
   background: var(--navy);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 850;
   text-decoration: none;
 }
@@ -348,9 +367,21 @@ button { touch-action: manipulation; }
   justify-content: space-between;
   gap: 14px;
   color: rgba(226, 244, 248, 0.72);
-  font-size: 10px;
+  font-size: 0.625rem;
 }
-.mode-footer a { font-weight: 800; text-underline-offset: 3px; }
+/* 글자 높이만큼만 눌리면 손가락으로 못 누른다. 여백으로 터치 영역을 넓히되
+   음수 마진으로 실제 레이아웃은 그대로 둔다. */
+.mode-footer a {
+  font-weight: 800;
+  text-underline-offset: 3px;
+  /* 글자 높이만큼만 눌리면 손가락으로 못 누른다. 애플 HIG 최소 44pt를 보장하되
+     음수 마진으로 실제 레이아웃 높이는 그대로 둔다. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  margin: -14px 0;
+}
 
 .character-settings-open,
 .character-dialog-close,
@@ -404,13 +435,13 @@ body.character-settings-modal-open { overflow: hidden; }
 }
 .character-dialog-header span {
   display: block;
-  color: var(--cyan-deep);
-  font-size: 8px;
+  color: var(--cyan-deep-text);
+  font-size: 0.625rem;
   font-weight: 900;
 }
 .character-dialog-header h2 {
   margin: 3px 0 0;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.2;
 }
 .character-dialog-close {
@@ -453,21 +484,21 @@ body.character-settings-modal-open { overflow: hidden; }
 .character-preview span {
   display: block;
   margin-bottom: 4px;
-  color: var(--cyan-deep);
-  font-size: 9px;
+  color: var(--cyan-deep-text);
+  font-size: 0.625rem;
   font-weight: 850;
 }
 .character-preview strong {
   display: block;
   overflow-wrap: anywhere;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.25;
 }
 .character-preview small {
   display: block;
   margin-top: 5px;
-  color: var(--muted);
-  font-size: 8px;
+  color: var(--muted-text);
+  font-size: 0.625rem;
   font-weight: 850;
 }
 
@@ -490,7 +521,7 @@ body.character-settings-modal-open { overflow: hidden; }
   display: block;
   margin-bottom: 7px;
   color: #354d63;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 850;
 }
 .character-field input {
@@ -502,7 +533,7 @@ body.character-settings-modal-open { overflow: hidden; }
   color: var(--ink);
   background: #fff;
   font: inherit;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 750;
 }
 .character-field input:focus,
@@ -512,8 +543,9 @@ body.character-settings-modal-open { overflow: hidden; }
 .character-image-actions button:focus-visible,
 .character-pack-actions button:focus-visible,
 .character-dialog-actions button:focus-visible {
-  outline: 3px solid rgba(39, 142, 174, 0.3);
+  outline: 3px solid #a9eff8;
   outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(9, 24, 33, 0.9);
 }
 
 .character-color-field {
@@ -549,8 +581,8 @@ body.character-settings-modal-open { overflow: hidden; }
   display: flex;
   align-items: center;
   gap: 7px;
-  color: var(--muted);
-  font-size: 10px;
+  color: var(--muted-text);
+  font-size: 0.625rem;
   font-weight: 750;
 }
 .character-color-custom input {
@@ -574,8 +606,8 @@ body.character-settings-modal-open { overflow: hidden; }
 .character-image-field > div:first-child > span { margin-bottom: 3px; }
 .character-image-field small {
   display: block;
-  color: var(--muted);
-  font-size: 9px;
+  color: var(--muted-text);
+  font-size: 0.625rem;
   font-weight: 650;
 }
 .character-image-actions { display: flex; gap: 7px; }
@@ -591,7 +623,7 @@ body.character-settings-modal-open { overflow: hidden; }
   color: #31536a;
   background: #fff;
   font: inherit;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -614,13 +646,13 @@ body.character-settings-modal-open { overflow: hidden; }
   display: block;
   margin-bottom: 3px;
   color: #354d63;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 850;
 }
 .character-pack-heading small {
   display: block;
-  color: var(--muted);
-  font-size: 9px;
+  color: var(--muted-text);
+  font-size: 0.625rem;
   font-weight: 650;
 }
 .character-pack-version {
@@ -630,7 +662,7 @@ body.character-settings-modal-open { overflow: hidden; }
   border-radius: 3px;
   color: #39758a;
   background: #eaf6f8;
-  font-size: 8px;
+  font-size: 0.625rem;
   font-weight: 900;
 }
 .character-pack-actions {
@@ -650,7 +682,7 @@ body.character-settings-modal-open { overflow: hidden; }
   color: #31536a;
   background: #fff;
   font: inherit;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 800;
   cursor: pointer;
 }
@@ -659,7 +691,7 @@ body.character-settings-modal-open { overflow: hidden; }
 .character-pack-status,
 .character-pack-note {
   margin: 0;
-  font-size: 9px;
+  font-size: 0.625rem;
   line-height: 1.5;
   font-weight: 700;
 }
@@ -675,14 +707,14 @@ body.character-settings-modal-open { overflow: hidden; }
   background: #faeaee;
 }
 .character-pack-status[hidden] { display: none; }
-.character-pack-note { color: var(--muted); }
+.character-pack-note { color: var(--muted-text); }
 
 .character-local-note,
 .character-base-pack-note {
   margin: 0;
   padding: 10px 11px;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.55;
   font-weight: 700;
 }
@@ -707,7 +739,7 @@ body.character-settings-modal-open { overflow: hidden; }
   padding: 0 13px;
   border-radius: 6px;
   font: inherit;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 850;
   cursor: pointer;
 }
@@ -736,7 +768,7 @@ body.character-settings-modal-open { overflow: hidden; }
   color: #fff;
   background: #172b42;
   box-shadow: 0 10px 30px rgba(2, 14, 28, 0.32);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 800;
   text-align: center;
 }
@@ -754,9 +786,9 @@ body.character-settings-modal-open { overflow: hidden; }
 @media (max-width: 360px) {
   .base-pack-options { grid-template-columns: 1fr; }
   .mode-card { grid-template-columns: 78px minmax(0, 1fr); }
-  .mode-header h1 { font-size: 21px; }
+  .mode-header h1 { font-size: 1.3125rem; }
   .mode-copy { padding-inline: 11px; }
-  .mode-title-line h2 { font-size: 17px; }
+  .mode-title-line h2 { font-size: 1.0625rem; }
   .mode-footer { flex-direction: column; }
   .character-settings-open { width: 54px; flex-basis: 54px; }
   .character-color-field { grid-template-columns: 1fr; row-gap: 10px; }
@@ -787,13 +819,13 @@ body.character-settings-modal-open { overflow: hidden; }
 .blank-pack-hint > div { min-width: 0; }
 .blank-pack-hint strong {
   display: block;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #f1fbff;
 }
 .blank-pack-hint small {
   display: block;
   margin-top: 2px;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.45;
   color: rgba(226, 244, 248, 0.82);
 }
@@ -802,7 +834,7 @@ body.character-settings-modal-open { overflow: hidden; }
   padding: 9px 14px;
   border: none;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   color: #fff;
